@@ -16,7 +16,6 @@ function App() {
   return (
     <Fragment>
       {contentTypes.map((type) => {
-        console.log(contentType);
         return (
           <button
             type="btn"
