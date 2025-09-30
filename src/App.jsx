@@ -1,32 +1,44 @@
-import { useEffect, useState } from "react";
+import { Fragment } from 'react';
+import { useEffect, useState } from 'react';
+
+const contentTypes = ['comments', 'posts', 'albums'];
 
 function App() {
-  const [products, setProducts] = useState([]);
+  const [resultFromApi, setResultFromApi] = useState([]);
+  const [contentType, setContentType] = useState('posts');
 
   useEffect(() => {
-    fetch("https://dummyjson.com/products")
+    fetch(`https://jsonplaceholder.typicode.com/${contentType}`)
       .then((result) => result.json())
-      .then((json) => setProducts(json.products))
-      .catch((error) => console.error(error));
-  }, []);
+      .then((json) => setResultFromApi(json));
+  }, [contentType]);
 
   return (
-    <>
-      <ul
-        className="list-group"
-        style={{
-          padding: 30,
-        }}
-      >
-        {products.map((product) => {
+    <Fragment>
+      {contentTypes.map((type) => {
+        console.log(contentType);
+        return (
+          <button
+            type="btn"
+            className="btn btn-primary"
+            key={type}
+            onClick={() => setContentType(type)}
+          >
+            {type}
+          </button>
+        );
+      })}
+
+      <ul className="list-group" style={{ padding: 20 }}>
+        {resultFromApi.map((result) => {
           return (
-            <li key={product.id} className="list-group-item">
-              {product.title} - ${product.price}
+            <li key={result.id} className="list-group-item">
+              {result.id} - {result.title || result.email}
             </li>
           );
         })}
       </ul>
-    </>
+    </Fragment>
   );
 }
 
